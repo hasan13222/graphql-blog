@@ -22,6 +22,10 @@ export const typeDefs = `#graphql
     published: Boolean!
     }
 
+    type Mutation {
+    signup(name: String, email: String, password: String): User
+    }
+
   type Query {
     posts: [Post]
     users: [User]
