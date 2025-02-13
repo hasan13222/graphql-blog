@@ -57,6 +57,34 @@ export const postResolvers = {
 
     return { updatePostError: null, post: updatedPost };
   },
+  publishPost: async (
+    parent: any,
+    args: any,
+    { prisma, userData }: TContext
+  ) => {
+    const { postId } = args;
+
+    const user = await checkUserAccess({ prisma, userData });
+    if (user?.error) {
+      return user.error;
+    }
+
+    const userConflict = await checkUserConflict(
+      prisma,
+      user.postAuthor.id,
+      postId
+    );
+    if (userConflict) {
+      return userConflict;
+    }
+
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
+      data: {published: true},
+    });
+
+    return { updatePostError: null, post: updatedPost };
+  },
   deletePost: async (
     parent: any,
     args: any,

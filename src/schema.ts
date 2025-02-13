@@ -11,6 +11,7 @@ export const typeDefs = `#graphql
   type Profile {
   id: ID!
   bio: String!
+  userId: Int!
   }
 
   type Post {
@@ -25,9 +26,11 @@ export const typeDefs = `#graphql
   type Mutation {
   signup(name: String, email: String, password: String): User,
   signin(email: String, password: String): AuthPayload,
+  updateProfile(bio: String): Profile,
   createPost(post: PostInput!): PostPayload,
   updatePost(postId: Int!, post: PostInput): UpdatePostPayload,
   deletePost(postId: Int! ): UpdatePostPayload,
+  publishPost(postId: Int!): UpdatePostPayload
   }
 
   input PostInput {
@@ -51,8 +54,10 @@ export const typeDefs = `#graphql
   }
     
   type Query {
+    me: User
     posts: [Post]
     users: [User]
     profiles: [Profile]
+    myProfile: Profile
   }
 `;
